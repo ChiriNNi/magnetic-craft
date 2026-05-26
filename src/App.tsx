@@ -515,9 +515,9 @@ function App() {
             <h1>MAGNETIC CRAFT</h1>
             <p className="hero-subtitle pixel-label">Строй. Твори. Играй.</p>
             <p className="hero-description">
-              <span>Здесь дети строят свой пиксельный мир</span>
-              <span>из магнитных кубиков, как в любимой игре</span>
-              <span>а набор для новых приключений можно забрать домой</span>
+              <span>Магнитные кубики</span>
+              <span>Игровая зона</span>
+              <span>Наборы домой</span>
             </p>
             <div className="hero-actions">
               <a
