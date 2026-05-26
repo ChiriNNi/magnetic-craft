@@ -205,6 +205,35 @@ const products = [
   },
 ]
 
+type Product = (typeof products)[number]
+
+const catalogFilters: Array<{
+  id: string
+  label: string
+  match: (product: Product) => boolean
+}> = [
+  {
+    id: 'all',
+    label: 'ВСЕ НАБОРЫ',
+    match: () => true,
+  },
+  {
+    id: 'starter',
+    label: 'СТАРТ',
+    match: (product: Product) => /48|72/.test(product.cubes),
+  },
+  {
+    id: 'large',
+    label: 'БОЛЬШИЕ',
+    match: (product: Product) => /96|128|150/.test(product.cubes),
+  },
+  {
+    id: 'scene',
+    label: 'СЦЕНЫ',
+    match: (product: Product) => !product.badge.includes('TOOL'),
+  },
+]
+
 const branches = [
   {
     city: 'Алматы',
@@ -274,11 +303,96 @@ function PixelCubes() {
   )
 }
 
+function CatalogPage({
+  onOpenProduct,
+}: {
+  onOpenProduct: (product: Product) => void
+}) {
+  const [activeFilter, setActiveFilter] = useState(catalogFilters[0].id)
+  const filter = catalogFilters.find((item) => item.id === activeFilter) ?? catalogFilters[0]
+  const visibleProducts = products.filter(filter.match)
+
+  return (
+    <main className="catalog-page">
+      <section className="catalog-hero pixel-grid">
+        <PixelCubes />
+        <div className="catalog-hero-inner reveal">
+          <p className="hero-badge pixel-label">SHOP LEVEL</p>
+          <h1>КАТАЛОГ НАБОРОВ</h1>
+          <p>
+            Все магнитные наборы Magnetic Craft в одном месте: выбирайте сцену, размер и формат
+            для игры дома или подарка.
+          </p>
+          <div className="catalog-stats" aria-label="Сводка каталога">
+            <span className="pixel-label">{products.length} наборов</span>
+            <span className="pixel-label">от 48 до 150 кубиков</span>
+            <span className="pixel-label">Minecraft style</span>
+          </div>
+        </div>
+        <div className="grass-divider" aria-hidden="true" />
+      </section>
+
+      <section className="section catalog-list-section pixel-grid">
+        <div className="catalog-toolbar reveal">
+          <div>
+            <p className="section-kicker pixel-label">FILTERS</p>
+            <h2>Выберите набор</h2>
+          </div>
+          <div className="catalog-filter-row" aria-label="Фильтр наборов">
+            {catalogFilters.map((item) => (
+              <button
+                className={`catalog-filter pixel-label ${item.id === activeFilter ? 'is-active' : ''}`}
+                type="button"
+                key={item.id}
+                onClick={() => setActiveFilter(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="product-grid catalog-page-grid">
+          {visibleProducts.map((product, index) => (
+            <article className="product-card reveal is-visible" style={revealStyle(index)} key={product.name}>
+              <div className="product-media">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  width="600"
+                  height="420"
+                  loading="lazy"
+                />
+                <span className="category-badge pixel-label">{product.badge}</span>
+              </div>
+              <h3>{product.name}</h3>
+              <p>{product.text}</p>
+              <span className="product-cubes pixel-label">{product.cubes}</span>
+              <strong>
+                <Price value={product.price} />
+              </strong>
+              <button
+                className="pixel-button primary small product-details-button"
+                type="button"
+                aria-label={`Открыть карточку набора ${product.name}`}
+                onClick={() => onOpenProduct(product)}
+              >
+                Подробнее
+              </button>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+  )
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState<(typeof products)[number] | null>(null)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const isCatalogPage = window.location.pathname.startsWith('/catalog')
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 24)
@@ -328,7 +442,7 @@ function App() {
   return (
     <>
       <header className={`site-header ${isScrolled ? 'is-scrolled' : ''}`}>
-        <a className="logo" href="#hero" aria-label="Magnetic Craft главная">
+        <a className="logo" href={isCatalogPage ? '/' : '#hero'} aria-label="Magnetic Craft главная">
           <span className="logo-image-shell" aria-hidden="true">
             <img
               className="logo-image"
@@ -354,7 +468,12 @@ function App() {
 
         <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Основная навигация">
           {navItems.map(([label, href]) => (
-            <a className="pixel-link" href={href} key={href} onClick={() => setMenuOpen(false)}>
+            <a
+              className="pixel-link"
+              href={href === '#catalog' ? '/catalog' : isCatalogPage ? `/${href}` : href}
+              key={href}
+              onClick={() => setMenuOpen(false)}
+            >
               {label}
             </a>
           ))}
@@ -370,6 +489,14 @@ function App() {
         </nav>
       </header>
 
+      {isCatalogPage ? (
+        <CatalogPage
+          onOpenProduct={(product) => {
+            setSelectedProduct(product)
+            setSelectedImageIndex(0)
+          }}
+        />
+      ) : (
       <main>
         <section className="hero-section" id="hero">
           <img
@@ -696,6 +823,7 @@ function App() {
           </a>
         </section>
       </main>
+      )}
 
       {selectedProduct && (
         <div
