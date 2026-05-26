@@ -514,11 +514,6 @@ function App() {
             <p className="hero-badge pixel-label">🟩 ИГРОВАЯ ЗОНА</p>
             <h1>MAGNETIC CRAFT</h1>
             <p className="hero-subtitle pixel-label">Строй. Твори. Играй.</p>
-            <p className="hero-description">
-              <span>Магнитные кубики</span>
-              <span>Игровая зона</span>
-              <span>Наборы домой</span>
-            </p>
             <div className="hero-actions">
               <a
                 className="pixel-button primary"

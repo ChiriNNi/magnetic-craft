@@ -258,27 +258,6 @@ h2,
   text-shadow: 3px 3px 0 var(--black);
 }
 
-.hero-description {
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 10px;
-  gap: 10px;
-  font-weight: 900;
-  justify-content: center;
-  line-height: 1.5;
-  margin: 16px auto 0;
-  max-width: 760px;
-}
-
-.hero-description span {
-  background: rgba(13, 13, 26, 0.76);
-  border: 3px solid rgba(109, 212, 245, 0.78);
-  box-shadow: 4px 4px 0 rgba(13, 13, 26, 0.72);
-  color: var(--white);
-  display: inline-flex;
-  padding: 8px 10px;
-}
-
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1502,18 +1481,6 @@ h3 {
 
   .catalog-filter {
     flex: 1 1 140px;
-  }
-
-  .hero-description {
-    font-size: 8px;
-    gap: 8px;
-    max-width: 300px;
-  }
-
-  .hero-description span {
-    border-width: 2px;
-    box-shadow: 3px 3px 0 rgba(13, 13, 26, 0.72);
-    padding: 7px 8px;
   }
 
   .hero-actions,
