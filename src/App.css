@@ -1152,28 +1152,171 @@ h3 {
   margin-top: 14px;
 }
 
-.map-placeholder {
-  align-items: center;
-  background:
-    linear-gradient(90deg, rgba(109, 212, 245, 0.22) 2px, transparent 2px),
-    linear-gradient(rgba(109, 212, 245, 0.22) 2px, transparent 2px),
-    #dff4f8;
-  background-size: 38px 38px;
+.branch-map {
+  background: var(--white);
   border: 4px solid var(--black);
   box-shadow: 7px 7px 0 var(--stone);
   display: grid;
-  justify-items: center;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
   margin: 26px auto 0;
   max-width: 1180px;
-  min-height: 210px;
-  padding: 22px;
-  text-align: center;
+  padding: 18px;
 }
 
-.map-placeholder span {
+.branch-map-canvas {
+  background:
+    linear-gradient(90deg, rgba(109, 212, 245, 0.2) 2px, transparent 2px),
+    linear-gradient(rgba(109, 212, 245, 0.2) 2px, transparent 2px),
+    linear-gradient(135deg, #dff4f8, #b8e3f5 54%, #def7dc 54%);
+  background-size:
+    38px 38px,
+    38px 38px,
+    100% 100%;
+  border: 3px solid var(--black);
+  min-height: 320px;
+  overflow: hidden;
+  position: relative;
+}
+
+.branch-map-canvas::before {
+  background:
+    linear-gradient(90deg, transparent 0 10%, rgba(90, 173, 47, 0.32) 10% 21%, transparent 21% 30%, rgba(90, 173, 47, 0.28) 30% 44%, transparent 44% 58%, rgba(90, 173, 47, 0.3) 58% 72%, transparent 72%),
+    linear-gradient(180deg, transparent 0 18%, rgba(139, 94, 60, 0.22) 18% 28%, transparent 28% 55%, rgba(139, 94, 60, 0.18) 55% 66%, transparent 66%);
+  clip-path: polygon(7% 62%, 18% 38%, 35% 29%, 58% 20%, 80% 27%, 94% 43%, 85% 66%, 64% 78%, 38% 82%, 18% 75%);
+  content: '';
+  inset: 28px;
+  opacity: 0.8;
+  position: absolute;
+}
+
+.map-region {
+  color: rgba(13, 13, 26, 0.4);
+  font-size: 10px;
+  position: absolute;
+  z-index: 1;
+}
+
+.map-region.north {
+  right: 20%;
+  top: 18%;
+}
+
+.map-region.south {
+  bottom: 18%;
+  left: 17%;
+}
+
+.map-route {
+  background: repeating-linear-gradient(90deg, var(--black) 0 8px, transparent 8px 14px);
+  height: 4px;
+  left: 30%;
+  position: absolute;
+  top: 53%;
+  transform: rotate(-31deg);
+  transform-origin: left center;
+  width: 42%;
+  z-index: 2;
+}
+
+.map-pin {
+  color: var(--night);
+  left: var(--pin-x);
+  position: absolute;
+  text-decoration: none;
+  top: var(--pin-y);
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+.pin-dot {
+  align-items: center;
+  background: var(--red);
+  border: 3px solid var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  color: var(--white);
+  display: inline-flex;
+  font-family: 'Press Start 2P', ui-monospace, monospace;
+  font-size: 10px;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.pin-card {
+  background: var(--white);
+  border: 3px solid var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  display: grid;
+  font-weight: 900;
+  gap: 2px;
+  left: 34px;
+  min-width: 180px;
+  padding: 10px;
+  position: absolute;
+  top: -8px;
+}
+
+.map-pin.is-east .pin-card {
+  left: auto;
+  right: 34px;
+}
+
+.pin-card strong {
   color: var(--grass-dark);
-  font-size: 12px;
-  line-height: 1.5;
+  font-family: 'Press Start 2P', ui-monospace, monospace;
+  font-size: 9px;
+}
+
+.branch-map-list {
+  display: grid;
+  gap: 12px;
+}
+
+.map-branch-card {
+  background: #f8f8ef;
+  border: 3px solid var(--black);
+  box-shadow: 5px 5px 0 rgba(13, 13, 26, 0.18);
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto 1fr;
+  padding: 14px;
+}
+
+.map-branch-card h3 {
+  font-family: 'Press Start 2P', ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.map-branch-card strong {
+  display: block;
+  font-size: 18px;
+  margin: 6px 0 8px;
+}
+
+.map-branch-card p {
+  font-weight: 850;
+  line-height: 1.45;
+  margin: 6px 0;
+}
+
+.map-branch-card .pixel-button {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.map-branch-number {
+  align-items: center;
+  background: var(--night);
+  border: 3px solid var(--grass);
+  box-shadow: 3px 3px 0 var(--black);
+  color: var(--yellow);
+  display: inline-flex;
+  font-size: 8px;
+  height: 38px;
+  justify-content: center;
+  width: 48px;
 }
 
 .reviews-section {
@@ -1573,6 +1716,20 @@ h3 {
 
   .product-specs {
     grid-template-columns: 1fr;
+  }
+
+  .branch-map {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  .branch-map-canvas {
+    min-height: 280px;
+  }
+
+  .pin-card {
+    min-width: 150px;
+    padding: 8px;
   }
 
   .catalog-more {

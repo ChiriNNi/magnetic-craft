@@ -242,6 +242,8 @@ const branches = [
     hours: 'Пн–Вс: 10:00 – 22:00',
     image: '/images/optimized/branch-mega.webp',
     map: mapsForumAlmaty,
+    mapX: 27,
+    mapY: 70,
   },
   {
     city: 'Астана',
@@ -250,6 +252,8 @@ const branches = [
     hours: 'Пн–Вс: 10:00 – 22:00',
     image: '/images/optimized/branch-dostyk.webp',
     map: mapsMegaSilkWay,
+    mapX: 68,
+    mapY: 36,
   },
 ]
 
@@ -732,10 +736,56 @@ function App() {
               </article>
             ))}
           </div>
-          <div className="map-placeholder reveal" role="img" aria-label="Карта филиалов Алматы и Астана">
-            {/* Replace with 2GIS or Google Maps embed */}
-            <span className="pixel-label">ALMATY + ASTANA</span>
-            <p>Позже сюда можно вставить интерактивную карту с двумя городами и быстрым выбором филиала.</p>
+          <div className="branch-map reveal" aria-label="Карта филиалов Алматы и Астана">
+            <div className="branch-map-canvas" role="img" aria-label="Схема расположения филиалов Magnetic Craft">
+              <span className="map-region north pixel-label">ASTANA</span>
+              <span className="map-region south pixel-label">ALMATY</span>
+              <span className="map-route" aria-hidden="true" />
+              {branches.map((branch, index) => (
+                <a
+                  className={`map-pin ${index === 1 ? 'is-east' : ''}`}
+                  href={branch.map}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={
+                    {
+                      '--pin-x': `${branch.mapX}%`,
+                      '--pin-y': `${branch.mapY}%`,
+                    } as CSSProperties
+                  }
+                  aria-label={`Открыть маршрут до ${branch.name}, ${branch.city}`}
+                  key={branch.name}
+                >
+                  <span className="pin-dot" aria-hidden="true">{index + 1}</span>
+                  <span className="pin-card">
+                    <strong>{branch.city}</strong>
+                    {branch.name}
+                  </span>
+                </a>
+              ))}
+            </div>
+            <div className="branch-map-list">
+              {branches.map((branch, index) => (
+                <article className="map-branch-card" key={branch.name}>
+                  <span className="map-branch-number pixel-label">#{index + 1}</span>
+                  <div>
+                    <h3>{branch.city}</h3>
+                    <strong>{branch.name}</strong>
+                    <p>📍 {branch.address}</p>
+                    <p>🕘 {branch.hours}</p>
+                  </div>
+                  <a
+                    className="pixel-button secondary dark-text small"
+                    href={branch.map}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Открыть маршрут 2ГИС до ${branch.name}, ${branch.city}`}
+                  >
+                    2ГИС маршрут
+                  </a>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
