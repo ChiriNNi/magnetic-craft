@@ -697,45 +697,6 @@ function App() {
             <h2>НАШИ ФИЛИАЛЫ</h2>
             <p>Две игровые зоны в разных городах: выбирайте ближайший ТРЦ и приходите строить.</p>
           </div>
-          <div className="branch-grid">
-            {branches.map((branch, index) => (
-              <article className="branch-card reveal" style={revealStyle(index)} key={branch.name}>
-                <img
-                  src={branch.image}
-                  alt={branch.name}
-                  width="900"
-                  height="560"
-                  loading="lazy"
-                />
-                <div className="branch-content">
-                  <span className="branch-city pixel-label">{branch.city}</span>
-                  <h3>{branch.name}</h3>
-                  <p>📍 {branch.address}</p>
-                  <p>🕐 {branch.hours}</p>
-                  <div className="branch-actions">
-                    <a
-                      className="pixel-button secondary dark-text small"
-                      href={branch.map}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Открыть маршрут 2ГИС до ${branch.name}, ${branch.city}`}
-                    >
-                      🗺 2ГИС маршрут
-                    </a>
-                    <a
-                      className="pixel-button primary small"
-                      href={whatsappLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Написать в WhatsApp о филиале ${branch.name}`}
-                    >
-                      💬 WhatsApp
-                    </a>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
           <div className="branch-map reveal" aria-label="Карта филиалов Алматы и Астана">
             <div className="branch-map-canvas" role="img" aria-label="Схема расположения филиалов Magnetic Craft">
               <span className="map-region north pixel-label">ASTANA</span>
