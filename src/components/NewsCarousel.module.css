@@ -6,19 +6,23 @@
   --border: #0d0d1a;
 
   background:
-    radial-gradient(circle at 18% 0%, rgba(240, 192, 64, 0.12), transparent 28%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 25%, transparent 25% 50%, rgba(255, 255, 255, 0.035) 50% 75%, transparent 75% 100%) 0 0 / 28px 28px,
-    linear-gradient(180deg, #151525 0%, #0d0d14 100%);
-  border: 4px solid var(--border);
-  box-shadow: 8px 8px 0 rgba(13, 13, 26, 0.4);
+    radial-gradient(circle at 22% 0%, rgba(240, 192, 64, 0.12), transparent 34%),
+    linear-gradient(180deg, #171724 0%, #10101f 42%, #0d0d14 100%);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 1px rgba(240, 192, 64, 0.08),
+    0 16px 36px rgba(7, 20, 38, 0.24);
   margin: 0 auto;
   max-width: 1180px;
-  padding: 14px;
+  overflow: hidden;
+  padding: 10px;
 }
 
 .viewport {
-  background: var(--bg-deep);
-  border: 3px solid var(--border);
+  background: #0d0d14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   height: 480px;
   overflow: hidden;
   position: relative;
