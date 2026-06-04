@@ -105,11 +105,31 @@ const kidsBenefits = [
   ['👫', 'ОДИН ИЛИ С ДРУЗЬЯМИ', 'Весело в любом составе'],
 ]
 
-const parentBenefits = [
-  ['📍', 'ПОНЯТНЫЙ ФОРМАТ', 'Всё прозрачно: пришли, выбрали время, играете'],
-  ['🏬', 'В ТОРГОВОМ ЦЕНТРЕ', 'Удобная парковка, рядом кафе и магазины'],
-  ['🎁', 'КУПИТЕ НАБОР ДОМОЙ', 'Возьмите любимые кубики с собой'],
-  ['👀', 'ВИДНО ЧЕМ ЗАНЯТ РЕБЁНОК', 'Открытое пространство, всё на виду'],
+const newsPromos = [
+  {
+    label: 'АКЦИЯ',
+    title: 'Будни выгоднее',
+    text: 'Приходите с понедельника по пятницу и собирайте большие постройки без очередей.',
+    image: '/images/optimized/about-zone.webp',
+  },
+  {
+    label: 'НОВОСТЬ',
+    title: 'Новые наборы в зоне',
+    text: 'Добавили свежие магнитные сцены, чтобы дети могли строить больше домов, арен и порталов.',
+    image: '/images/optimized/catalog-family.webp',
+  },
+  {
+    label: 'СЕМЬЯМ',
+    title: 'Набор можно забрать домой',
+    text: 'После игры выберите любимый комплект и продолжайте пиксельные приключения дома.',
+    image: '/images/optimized/catalog-mini.webp',
+  },
+  {
+    label: 'АНОНС',
+    title: 'Выходные в стиле Minecraft',
+    text: 'Готовим тематические игровые дни с большими совместными постройками в филиалах.',
+    image: '/images/optimized/reviews-bg.webp',
+  },
 ]
 
 const products = [
@@ -396,6 +416,7 @@ function App() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [activePromoIndex, setActivePromoIndex] = useState(0)
   const isCatalogPage = window.location.pathname.startsWith('/catalog')
 
   useEffect(() => {
@@ -442,6 +463,19 @@ function App() {
       window.removeEventListener('keydown', onKeyDown)
     }
   }, [selectedProduct])
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActivePromoIndex((index) => (index + 1) % newsPromos.length)
+    }, 5200)
+
+    return () => window.clearInterval(interval)
+  }, [])
+
+  const activePromo = newsPromos[activePromoIndex]
+  const nextPromoIndex = (activePromoIndex + 1) % newsPromos.length
+  const nextNextPromoIndex = (activePromoIndex + 2) % newsPromos.length
+  const visiblePromoCards = [newsPromos[nextPromoIndex], newsPromos[nextNextPromoIndex]]
 
   return (
     <>
@@ -626,17 +660,67 @@ function App() {
 
         <section className="section parents-section" id="parents">
           <div className="section-heading dark reveal">
-            <p className="section-kicker pixel-label">PARENT MODE</p>
-            <h2>УДОБНО ДЛЯ РОДИТЕЛЕЙ</h2>
+            <p className="section-kicker pixel-label">NEWS FEED</p>
+            <h2>НОВОСТИ И АКЦИИ</h2>
+            <p>Свежие поводы заглянуть в Magnetic Craft: акции, анонсы и новые игровые сценарии.</p>
           </div>
-          <div className="benefit-grid calm">
-            {parentBenefits.map(([icon, title, text], index) => (
-              <article className="benefit-card reveal" style={revealStyle(index)} key={title}>
-                <span aria-hidden="true">{icon}</span>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </article>
-            ))}
+          <div className="promo-carousel reveal" aria-label="Новости и акции Magnetic Craft">
+            <article className="promo-feature" key={activePromo.title}>
+              <img src={activePromo.image} alt="" width="900" height="620" loading="lazy" />
+              <div className="promo-feature-content">
+                <span className="promo-label pixel-label">{activePromo.label}</span>
+                <h3>{activePromo.title}</h3>
+                <p>{activePromo.text}</p>
+                <a className="pixel-button primary small" href="#contacts">
+                  Узнать подробнее
+                </a>
+              </div>
+            </article>
+            <div className="promo-side-list" aria-label="Следующие новости">
+              {visiblePromoCards.map((promo, index) => (
+                <button
+                  className="promo-mini-card"
+                  type="button"
+                  key={promo.title}
+                  onClick={() => setActivePromoIndex(index === 0 ? nextPromoIndex : nextNextPromoIndex)}
+                >
+                  <img src={promo.image} alt="" width="260" height="180" loading="lazy" />
+                  <span className="promo-label pixel-label">{promo.label}</span>
+                  <strong>{promo.title}</strong>
+                </button>
+              ))}
+            </div>
+            <div className="promo-controls" aria-label="Переключение новостей">
+              <button
+                className="promo-arrow pixel-label"
+                type="button"
+                aria-label="Предыдущая новость"
+                onClick={() =>
+                  setActivePromoIndex((index) => (index - 1 + newsPromos.length) % newsPromos.length)
+                }
+              >
+                ‹
+              </button>
+              <div className="promo-dots">
+                {newsPromos.map((promo, index) => (
+                  <button
+                    className={index === activePromoIndex ? 'is-active' : ''}
+                    type="button"
+                    key={promo.title}
+                    aria-label={`Показать новость ${index + 1}`}
+                    onClick={() => setActivePromoIndex(index)}
+                  />
+                ))}
+              </div>
+              <button
+                className="promo-arrow pixel-label"
+                type="button"
+                aria-label="Следующая новость"
+                onClick={() => setActivePromoIndex((index) => (index + 1) % newsPromos.length)}
+              >
+                ›
+              </button>
+            </div>
           </div>
         </section>
 
