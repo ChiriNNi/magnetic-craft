@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FocusEvent } from 'react'
+import { useEffect, useState, type FocusEvent } from 'react'
 import styles from './NewsCarousel.module.css'
 
 export type NewsSlide = {
@@ -44,19 +44,6 @@ export function NewsCarousel({
     return () => window.clearInterval(interval)
   }, [autoPlayInterval, hasMultipleSlides, isPaused, slides.length])
 
-  const previewSlides = useMemo(() => {
-    if (!hasSlides) {
-      return []
-    }
-
-    return [1, 2]
-      .map((offset) => {
-        const index = wrapIndex(activeIndex + offset, slides.length)
-        return { index, slide: slides[index] }
-      })
-      .filter((item, itemIndex, items) => items.findIndex((current) => current.index === item.index) === itemIndex)
-  }, [activeIndex, hasSlides, slides])
-
   if (!hasSlides) {
     return null
   }
@@ -79,41 +66,33 @@ export function NewsCarousel({
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className={styles.viewport}>
-        <div className={styles.track} style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
-          {slides.map((slide) => (
-            <article className={styles.slide} key={slide.title}>
-              <img className={styles.slideImage} src={slide.image} alt="" width="900" height="620" loading="lazy" />
-              <div className={styles.slideContent}>
-                <span className={styles.label}>{slide.label}</span>
-                <h3 className={styles.title}>{slide.title}</h3>
-                <p className={styles.text}>{slide.text}</p>
-                {slide.ctaHref && (
-                  <a className={`${styles.cta} pixel-button primary small`} href={slide.ctaHref}>
-                    {slide.ctaLabel ?? 'Узнать подробнее'}
-                  </a>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-
-      {hasMultipleSlides && (
-        <div className={styles.sideList} aria-label="Следующие новости">
-          {previewSlides.map(({ index, slide }) => (
-            <button className={styles.preview} type="button" key={slide.title} onClick={() => setActiveIndex(index)}>
-              <img className={styles.previewImage} src={slide.image} alt="" width="260" height="180" loading="lazy" />
+        {slides.map((slide, index) => (
+          <article
+            className={`${styles.slide} ${index === activeIndex ? styles.slideActive : ''}`.trim()}
+            aria-hidden={index !== activeIndex}
+            key={slide.title}
+          >
+            <img className={styles.slideImage} src={slide.image} alt="" width="1200" height="640" loading="lazy" />
+            <div className={styles.slideContent}>
               <span className={styles.label}>{slide.label}</span>
-              <strong className={styles.previewTitle}>{slide.title}</strong>
-            </button>
-          ))}
-        </div>
-      )}
+              <h3 className={styles.title}>{slide.title}</h3>
+              <p className={styles.text}>{slide.text}</p>
+              {slide.ctaHref && (
+                <a className={styles.cta} href={slide.ctaHref}>
+                  {slide.ctaLabel ?? 'Узнать подробнее'}
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
 
       {hasMultipleSlides && (
         <div className={styles.controls} aria-label="Переключение новостей">
           <button className={styles.arrow} type="button" aria-label="Предыдущая новость" onClick={goToPrevious}>
-            ‹
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 5 8 12l7 7" />
+            </svg>
           </button>
           <div className={styles.dots}>
             {slides.map((slide, index) => (
@@ -127,7 +106,9 @@ export function NewsCarousel({
             ))}
           </div>
           <button className={styles.arrow} type="button" aria-label="Следующая новость" onClick={goToNext}>
-            ›
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9 5 7 7-7 7" />
+            </svg>
           </button>
         </div>
       )}
